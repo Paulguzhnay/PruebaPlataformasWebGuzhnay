@@ -20,6 +20,8 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.awt.event.ActionEvent;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 public class IngresarArte extends JFrame {
 
@@ -30,6 +32,7 @@ public class IngresarArte extends JFrame {
 	private JTextField txtOrigen;
     private static final QName SERVICE_NAME = new QName("http://services.prueba.ups.edu.ec/", "ArteSOAPService");
     private static ArteSOAP port;
+    JTextArea txtArea;
 	/**
 	 * Launch the application.
 	 */
@@ -71,7 +74,7 @@ public class IngresarArte extends JFrame {
 	public IngresarArte() {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 884, 499);
+		setBounds(100, 100, 884, 668);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -141,13 +144,26 @@ public class IngresarArte extends JFrame {
 		JButton btnNewButton_1 = new JButton("LISTAR");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ListarArte vtnListar = new ListarArte();
+	/*			ListarArte vtnListar = new ListarArte();
 				vtnListar.setVisible(true);
-				dispose();
+				dispose();*/
+				Listar();
 			}
 		});
 		btnNewButton_1.setBounds(348, 379, 85, 21);
 		contentPane.add(btnNewButton_1);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(83, 445, 677, 159);
+		contentPane.add(panel_1);
+		panel_1.setLayout(null);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 10, 639, 139);
+		panel_1.add(scrollPane);
+		
+		txtArea = new JTextArea();
+		scrollPane.setViewportView(txtArea);
 	}
 	
 	public void ObtenerArte() {
@@ -169,5 +185,23 @@ public class IngresarArte extends JFrame {
 		
         java.lang.String _insertar__return = port.insertar(art);
         System.out.println("insertar.result=" + art);
+	}
+	
+	public void Listar() {
+
+        java.util.List<ec.edu.ups.Prueba.Arte> arte = port.getObras();
+       
+        for(int i=0;i<arte.size();i++) {
+        	
+        	txtArea.append(arte.get(i).getCodigo());
+        	txtArea.append("\n");
+        	txtArea.append(arte.get(i).getAutor());
+        	txtArea.append("\n");
+        	txtArea.append(arte.get(i).getNombreObra());
+        	txtArea.append("\n");
+        	txtArea.append(arte.get(i).getOrigen());
+        	txtArea.append("\n");
+        	txtArea.append("************************************************ \n");
+        }
 	}
 }
